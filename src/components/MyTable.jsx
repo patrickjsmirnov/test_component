@@ -48,28 +48,25 @@ function MyTable() {
   };
 
   const sortASC = () => {
-    console.log('click');
-    const green = 3;
-    const yellow = 2;
-    const red = 1;
-    const check = (info.filter((el) => typeof el.status !== 'number')).length > 0;
-    if (check) {
-      info = info.map((el) => (el.status === 'green' ? { ...el, status: green } : (el.status === 'yellow' ? { ...el, status: yellow } : { ...el, status: red }))).sort((a, b) => b.status - a.status);
+    const check = (info.filter((el) => typeof el.status !== 'number'));
+    if (check.length > 0) {
+      info = info.map((el) => (el.status === 'green' ? { ...el, status: 3 } : (el.status === 'yellow' ? { ...el, status: 2 } : { ...el, status: 1 }))).sort((a, b) => b.status - a.status);
       dispatch(initData(info));
     } else {
-      console.log(info)
-      // info = info.sort((a, b) => b.status - a.status);
+      info = [...info].sort((a, b) => b.status - a.status);
       dispatch(initData(info));
     }
   };
 
   const sortDESC = () => {
-    console.log('click');
-    const green = 3;
-    const yellow = 2;
-    const red = 1;
-    info = info.map((el) => (el.status === 'green' ? { ...el, status: green } : (el.status === 'yellow' ? { ...el, status: yellow } : { ...el, status: red }))).sort((a, b) => a.status - b.status);
-    dispatch(initData(info));
+    const check = (info.filter((el) => typeof el.status !== 'number'));
+    if (check.length > 0) {
+      info = info.map((el) => (el.status === 'green' ? { ...el, status: 3 } : (el.status === 'yellow' ? { ...el, status: 2 } : { ...el, status: 1 }))).sort((a, b) => a.status - b.status);
+      dispatch(initData(info));
+    } else {
+      info = [...info].sort((a, b) => a.status - b.status);
+      dispatch(initData(info));
+    }
   };
 
   return (
