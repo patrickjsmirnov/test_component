@@ -1,7 +1,7 @@
-/* eslint-disable no-nested-ternary */
+/* eslint-disable max-len */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-param-reassign */
-/* eslint-disable max-len */
+/* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,6 +23,7 @@ import './MyTable.css';
 function MyTable() {
   const [sort, setSort] = useState('All');
   const [sortToken, setSortToken] = useState('All');
+  const [sortCond, setCortCond] = useState(true);
   let info = useSelector((state) => state.dataSlice.info);
 
   const dispatch = useDispatch();
@@ -47,34 +48,59 @@ function MyTable() {
     }
   };
 
-  const sortASC = () => {
+  const sortStatus = (event) => {
+    const text = event.target.innerHTML;
     const check = (info.filter((el) => typeof el.status !== 'number'));
     if (check.length > 0) {
-      info = info.map((el) => (el.status === 'green' ? { ...el, status: 3 } : (el.status === 'yellow' ? { ...el, status: 2 } : { ...el, status: 1 }))).sort((a, b) => b.status - a.status);
+      info = info.map((el) => (el.status === 'green' ? { ...el, status: 3 } : (el.status === 'yellow' ? { ...el, status: 2 } : { ...el, status: 1 })));
+    }
+
+    if (text === '▲') {
+      info = [...info].sort((a, b) => b.status - a.status);
+    } else {
+      info = [...info].sort((a, b) => a.status - b.status);
+    }
+    dispatch(initData(info));
+  };
+
+  const sortVolume = (event) => {
+    const text = event.target.innerHTML;
+    if (text === '▲') {
+      info = [...info].sort((a, b) => b.volume - a.volume);
       dispatch(initData(info));
     } else {
-      info = [...info].sort((a, b) => b.status - a.status);
+      info = [...info].sort((a, b) => a.volume - b.volume);
       dispatch(initData(info));
     }
   };
 
-  const sortDESC = () => {
-    const check = (info.filter((el) => typeof el.status !== 'number'));
-    if (check.length > 0) {
-      info = info.map((el) => (el.status === 'green' ? { ...el, status: 3 } : (el.status === 'yellow' ? { ...el, status: 2 } : { ...el, status: 1 }))).sort((a, b) => a.status - b.status);
+  const sortConditions = (event) => {
+    const text = event.target.innerHTML;
+    info = [...info].map((el) => {
+      if (el.conditions.includes('years')) {
+        const time = (el.conditions.substring(1, 4));
+        return el = { ...el, time: Math.round(+(`${time[0]}.${time[2]}`) * 12) };
+      }
+      const time = (el.conditions.substring(1, 4));
+      return el = { ...el, time: Math.round(+(`${time[0]}.${time[2]}`)) };
+    });
+    if (text === '▼') {
+      info = [...info].sort((a, b) => a.time - b.time);
       dispatch(initData(info));
+      setCortCond(!sortCond);
     } else {
-      info = [...info].sort((a, b) => a.status - b.status);
+      info = [...info].sort((a, b) => b.time - a.time);
       dispatch(initData(info));
+      setCortCond(!sortCond);
     }
   };
 
   return (
-    <TableContainer style={{ width: 900, margin: '100px auto' }} component={Paper}>
+    <TableContainer style={{ width: 1000, margin: '100px auto' }} component={Paper}>
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell style={{ display: 'flex' }} align="left">
+            <TableCell style={{ display: 'flex', alignItems: 'center' }} align="left">
               <FormControl variant="standard" sx={{ m: 1, width: 40 }}>
                 <InputLabel id="demo-simple-select-standard-label">All</InputLabel>
                 <Select
@@ -91,29 +117,46 @@ function MyTable() {
                 </Select>
               </FormControl>
               <p>Project</p>
-              <button type="button" className="table__button" onClick={sortASC}>▲</button>
-              <button type="button" className="table__button" onClick={sortDESC}>▼</button>
+              <button type="button" className="table__button" onClick={sortStatus}>▲</button>
+              <button type="button" className="table__button" onClick={sortStatus}>▼</button>
             </TableCell>
             <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">
-              <FormControl variant="standard" sx={{ m: 1, width: 40 }}>
-                <InputLabel id="demo-simple-select-standard-label">All</InputLabel>
-                <Select
-                  labelId="demo-simple-select-standard-label"
-                  id="demo-simple-select-standard"
-                  label="All"
-                  value={sortToken}
-                  onChange={onSortToken}
-                >
-                  <MenuItem value="All">
-                    <em>All</em>
-                  </MenuItem>
-                  {data !== undefined && data.map((el) => <MenuItem key={el.id} value={el.type}>{el.type}</MenuItem>)}
-                </Select>
-              </FormControl>
-              Token type
+              <div style={{ display: 'flex', alignItems: 'center' }}>
+                <FormControl variant="standard" sx={{ m: 1, width: 40 }}>
+                  <InputLabel id="demo-simple-select-standard-label">All</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    label="All"
+                    value={sortToken}
+                    onChange={onSortToken}
+                  >
+                    <MenuItem value="All">
+                      <em>All</em>
+                    </MenuItem>
+                    <MenuItem value="THT">THT</MenuItem>
+                    <MenuItem value="TRST">TRST</MenuItem>
+                  </Select>
+                </FormControl>
+                <p>Token type</p>
+              </div>
             </TableCell>
-            <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">Conditions</TableCell>
-            <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">Volume</TableCell>
+            <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">
+              {sortCond ? <button type="button" className="table__button" onClick={sortConditions}>▼</button>
+                : <button type="button" className="table__button" onClick={sortConditions}>▲</button> }
+
+              Conditions
+            </TableCell>
+            <TableCell
+              style={{
+                width: 100, whiteSpace: 'nowrap', display: 'flex', alignItems: 'center',
+              }}
+              align="left"
+            >
+              <p>Volume</p>
+              <button type="button" className="table__button" onClick={sortVolume}>▲</button>
+              <button type="button" className="table__button" onClick={sortVolume}>▼</button>
+            </TableCell>
             <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">ROI</TableCell>
             <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">Free float</TableCell>
             <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">Insuarance hedge</TableCell>
