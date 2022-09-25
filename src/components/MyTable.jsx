@@ -10,7 +10,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -96,13 +95,12 @@ function MyTable() {
   };
 
   return (
-    <TableContainer style={{ width: 1000, margin: '100px auto' }} component={Paper}>
+    <TableContainer style={{ width: '80%', margin: '100px auto' }} component={Paper}>
       <Table aria-label="simple table">
-        <TableHead>
+        <TableHead style={{ backgroundColor: '#66A3D2' }}>
           <TableRow>
             <TableCell style={{ display: 'flex', alignItems: 'center' }} align="left">
               <FormControl variant="standard" sx={{ m: 1, width: 40 }}>
-                <InputLabel id="demo-simple-select-standard-label">All</InputLabel>
                 <Select
                   labelId="demo-simple-select-standard-label"
                   id="demo-simple-select-standard"
@@ -117,13 +115,14 @@ function MyTable() {
                 </Select>
               </FormControl>
               <p>Project</p>
-              <button type="button" className="table__button" onClick={sortStatus}>▲</button>
-              <button type="button" className="table__button" onClick={sortStatus}>▼</button>
+              <div className="table__buttons-list">
+                <button type="button" className="table__button" onClick={sortStatus}>▲</button>
+                <button type="button" className="table__button" onClick={sortStatus}>▼</button>
+              </div>
             </TableCell>
             <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">
               <div style={{ display: 'flex', alignItems: 'center' }}>
                 <FormControl variant="standard" sx={{ m: 1, width: 40 }}>
-                  <InputLabel id="demo-simple-select-standard-label">All</InputLabel>
                   <Select
                     labelId="demo-simple-select-standard-label"
                     id="demo-simple-select-standard"
@@ -154,19 +153,22 @@ function MyTable() {
               align="left"
             >
               <p>Volume</p>
-              <button type="button" className="table__button" onClick={sortVolume}>▲</button>
-              <button type="button" className="table__button" onClick={sortVolume}>▼</button>
+              <div className="table__buttons-list">
+                <button type="button" className="table__button" onClick={sortVolume}>▲</button>
+                <button type="button" className="table__button" onClick={sortVolume}>▼</button>
+              </div>
             </TableCell>
             <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">ROI</TableCell>
             <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">Free float</TableCell>
             <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">Insuarance hedge</TableCell>
+            <TableCell style={{ width: 100, whiteSpace: 'nowrap' }} align="left">{' '}</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {info !== undefined && info.map((row) => (
             <TableRow key={row.id}>
               <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', gap: '10px' }}>
                   {' '}
                   <div style={{
                     width: '20px',
@@ -178,7 +180,7 @@ function MyTable() {
                   {row.name}
                 </div>
               </TableCell>
-              <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>{row.type}</TableCell>
+              <TableCell align="center" style={{ whiteSpace: 'nowrap' }}>{row.type}</TableCell>
               <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>{row.conditions}</TableCell>
               <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>
                 $
@@ -190,12 +192,12 @@ function MyTable() {
                 {' '}
                 %
               </TableCell>
-              <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>
+              <TableCell align="center" style={{ whiteSpace: 'nowrap' }}>
                 {row.free}
                 {' '}
                 %
               </TableCell>
-              <TableCell align="left" style={{ whiteSpace: 'nowrap' }}>
+              <TableCell align="center" style={{ whiteSpace: 'nowrap' }}>
                 {row.hedge}
                 {' '}
                 %

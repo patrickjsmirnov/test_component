@@ -1,10 +1,38 @@
 .table__button {
-   width: 15px;
-   height: 15px;
+   width: 10px;
+   height: 10px;
    text-align: center;
-   color: grey;
+   color: black;
    background-color: transparent;
    outline: none;
    border: none;
    cursor: pointer;
+   margin-right: 10px;
+   padding: 0;
+}
+
+.css-14maifs-MuiFormControl-root {
+   width: 46px!important;
+   border: none!important;
+}
+
+.css-1yk1gt9-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+   border: none!important;
+}
+
+.table__buttons-list {
+   display: flex;
+   flex-direction: column;
+   margin-left: 10px;
+   gap: 3px;
+}
+
+.css-1ygcj2i-MuiTableCell-root {
+   border-bottom: 0!important;
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+   color: black!important;
+   border: 2px solid #66A3D2!important;
+   outline: none!important;
 }
